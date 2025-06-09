@@ -59,12 +59,12 @@ typedef struct s_philo
 	unsigned int	id; // Identificador del hilo
 	unsigned int	time_ate; //Tiempo por comida
 	unsigned int	fork[2]; //Dos tenedores/philo
-	pthread_mutex_t	mutex_time_lock; // Tiempo que se queda el tenedor lockeado
-	time_t			last_meal; //Ultima comida del ultimo philo
+	pthread_mutex_t	mutex_last_meal_lock; //Mutex para proteger el acceso a last_meal
+	time_t			last_meal; //Tiempo de la última comida del ultimo philo
 	t_table			*table; //Referencia a la mesa
 }	t_philo;
 
-typedef enum e_stat
+typedef enum e_stat //Representa el estdo en valores numéricos (enum)
 {
 	DIED = 0,
 	EATING = 1,
@@ -74,4 +74,11 @@ typedef enum e_stat
 	FORK_L = 5
 }	t_stat;
 
+
+//ERROR_HANDLING (types_exit)
+void	*free_table(t_table *table);
+void	kill_mutex(t_table *table);
+int		msg(char *str, char *detail, int exit_no);
+int		err_fail(char *str, char *detail, t_table *table);
+void	*err_null(char *str, char *detail, t_table *table);
 #endif
