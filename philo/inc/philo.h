@@ -81,4 +81,8 @@ void	kill_mutex(t_table *table);
 int		msg(char *str, char *detail, int exit_no);
 int		err_fail(char *str, char *detail, t_table *table);
 void	*err_null(char *str, char *detail, t_table *table);
+
+//PARSING (parse)
+int	ulltoi(char *str);
+bool	valid_input(int ac, char **av);
 #endif
