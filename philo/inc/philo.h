@@ -75,14 +75,17 @@ typedef enum e_stat //Representa el estdo en valores numéricos (enum)
 }	t_stat;
 
 
-//ERROR_HANDLING (types_exit)
+//ERROR_HANDLING (types_exit.c)
 void	*free_table(t_table *table);
 void	kill_mutex(t_table *table);
 int		msg(char *str, char *detail, int exit_no);
 int		err_fail(char *str, char *detail, t_table *table);
 void	*err_null(char *str, char *detail, t_table *table);
 
-//PARSING (parse)
+//PARSING (parse.c)
 int	ulltoi(char *str);
 bool	valid_input(int ac, char **av);
+
+//INIT (init.c)
+t_table	*init_table(int ac, char **av, int i);
 #endif
