@@ -88,4 +88,12 @@ bool	valid_input(int ac, char **av);
 
 //INIT (init.c)
 t_table	*init_table(int ac, char **av, int i);
+
+//TIME (time.c)
+time_t	get_time_in_ms(void);
+void	philo_sleep(t_table *table, time_t is_sleeping);
+void	sim_stat_delay(time_t start_time);
+
+//GRIM REAPER (grim_reaper.c)
+bool	is_stopped(t_table *table);
 #endif
