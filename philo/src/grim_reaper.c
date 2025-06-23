@@ -28,3 +28,15 @@ bool	is_stopped(t_table *table)
 	pthread_mutex_unlock(&table->sim_stat_lock); //Se desbloquea el mismo mutex
 	return stop_flag;
 }
+
+static bool kill_philo(t_philo *philo)
+{
+	time_t time;
+
+	time = get_time_in_ms();
+	//si tarda por ejemplo 20 segundos desde su ultima comida y tiene 10 segundos para morir -> 20 > 10 philo muere
+	if((time - philo->last_meal) >= (time - philo->table->time_die))
+	{
+		
+	}
+}

@@ -15,7 +15,7 @@
 # define STR_MAX_PHILOS "100"
 
 # ifndef DEBUG_FORMAT
-#  define DEBUG_FORMAT 0
+#  define DEBUG_FORMAT 1
 # endif
 
 # define NC		"\e[0m"
@@ -96,4 +96,7 @@ void	sim_stat_delay(time_t start_time);
 
 //GRIM REAPER (grim_reaper.c)
 bool	is_stopped(t_table *table);
+
+//OUTPUT (output.c)
+void	write_stat(t_philo *philo, bool reaper_report, t_stat stat);
 #endif
