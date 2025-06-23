@@ -32,11 +32,60 @@ bool	is_stopped(t_table *table)
 static bool kill_philo(t_philo *philo)
 {
 	time_t time;
-
-	time = get_time_in_ms();
 	//si tarda por ejemplo 20 segundos desde su ultima comida y tiene 10 segundos para morir -> 20 > 10 philo muere
+	time = get_time_in_ms();
 	if((time - philo->last_meal) >= (time - philo->table->time_die))
 	{
-		
+		set_sim_stop_flag(philo->table, true);
+		write_stat(philo, true, DIED);
+		pthread_mutex_unlock(&philo->mutex_last_meal_lock);
+		return true;
 	}
+	return false;
+}
+
+/*
+*	En esta funcion hay que establecer una variable bool
+*	para ver si ha comido lo suficiente (true) y sino (false)
+*	y mientras hayan filosofos en la mesa protege el mutex
+*	de la última comida y luego con kill_philo comprueba
+*	si ha muerto el filosofo DE CADA ITERACION (philos[i])
+*	si es así retorna true.
+*	Si ha comido al menos una vez entonces comprueba
+*	si las veces que ha comido (philos[i]->times_ate) ES MENOR
+*	que las veces que debe comer (philos[i]->must_eat_count) y
+*	claramente casteado con unsigned int, si es así asigna la
+*	varible de "all_ate" a false (ya que no han comido lo suficiente
+*	para terminar el programa)
+*	Y si ha comido al menos una vez Y la variable "all_ate" es true
+*	(es decir, que han comido lo suficiente) entonces para la simulacion
+*	con set_sim_stop_flag(la mesa y true) y retorna trua ya que han comido
+*	lo que debian, luego desbloquear el tiempo de la última comida y pasar al
+*	siguiente filosofo, y si no ocurre nada de lo anterior retorna false
+*	(la simulación continua)
+*/
+
+static bool	end_condition(t_table *table)
+{
+	bool	all_ate;
+	int		i;
+	i = 0;
+	all_ate = true;
+	while(i < table->nb_philos)
+	{
+		pthread_mutex_lock(table->philos[i]->mutex_last_meal_lock);
+		if(kill_philo(table->philos[i]))
+			return true;
+		if(table->must_eat_count != 1)
+			if(table->philos[i]->time_ate < (unsigned int)table->must_eat_count)
+				all_ate = false;
+			pthread_mutex_unlock(table->philos[i]->mutex_last_meal_lock);
+		if (table->must_eat_count != 1 && all_ate == true)
+		{
+			set_sim_stop_flag(table, true);
+			return true;
+		}
+		i++;
+	}
+	return false;
 }
