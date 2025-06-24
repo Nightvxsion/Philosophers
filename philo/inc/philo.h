@@ -96,6 +96,7 @@ void	sim_stat_delay(time_t start_time);
 
 //GRIM REAPER (grim_reaper.c)
 bool	is_stopped(t_table *table);
+void	*grim_reaper(void *data);
 
 //OUTPUT (output.c)
 void	write_stat(t_philo *philo, bool reaper_report, t_stat stat);

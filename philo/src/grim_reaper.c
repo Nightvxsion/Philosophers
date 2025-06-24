@@ -79,13 +79,39 @@ static bool	end_condition(t_table *table)
 		if(table->must_eat_count != 1)
 			if(table->philos[i]->time_ate < (unsigned int)table->must_eat_count)
 				all_ate = false;
-			pthread_mutex_unlock(table->philos[i]->mutex_last_meal_lock);
-		if (table->must_eat_count != 1 && all_ate == true)
-		{
-			set_sim_stop_flag(table, true);
-			return true;
-		}
+		pthread_mutex_unlock(table->philos[i]->mutex_last_meal_lock);
 		i++;
 	}
+	if (table->must_eat_count != 1 && all_ate == true)
+	{
+		set_sim_stop_flag(table, true);
+		return true;
+	}
 	return false;
+}
+
+/*
+*	Esta función supervisa el estado de todos los filósofos
+*	primero hacemos referencia a la mesa (t_table) casteando
+*	un puntero a data, luego si el numero de veces que debe
+*	comer es 0 entonces se acaba inmediatamente, mientras true
+*	entonces si todos han comido suficiente (es decir, si retorna
+*	true la funcion anterior) entonces retorna NULL y sino espera
+*/
+
+void	*grim_reaper(void *data)
+{
+	t_table	*table;
+	table = (t_table *)data; //Casteo
+	if(table->must_eat_count == 0)
+		return NULL;
+	set_sim_stop_flag(table, false);
+	sim_stat_delay(table->start_time);
+	while(true)
+	{
+		if(end_condition(table) == true)
+			return NULL;
+		usleep(1000);
+	}
+	return NULL;
 }
