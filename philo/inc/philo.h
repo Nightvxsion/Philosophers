@@ -100,4 +100,7 @@ void	*grim_reaper(void *data);
 
 //OUTPUT (output.c)
 void	write_stat(t_philo *philo, bool reaper_report, t_stat stat);
+
+//PHILO_MANAGEMENT (philo_manager.c)
+void	*philo_management(void *data);
 #endif
